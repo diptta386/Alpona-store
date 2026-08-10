@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Alpona — Handmade with Care & Culture</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="logoWrap" href="#home">
+    <img src="assets/logo.jpeg" alt="Alpona logo">
+    <div><strong>ALPONA</strong><span>Handmade with Care & Culture</span></div>
+  </a>
+  <nav>
+    <a href="#shop">Shop</a><a href="#story">Our Story</a><a href="#contact">Contact</a>
+    <button class="navBtn" onclick="openCart()">Cart <span id="cartCount">0</span></button>
+    <button class="navBtn owner" onclick="showAdminLogin()">Owner</button>
+  </nav>
+</header>
+
+<main id="home">
+<section class="hero">
+  <div class="heroText">
+    <p class="kicker">বাংলাদেশের হাতে তৈরি ঐতিহ্য</p>
+    <h1>Tradition,<br>made by hand.</h1>
+    <p>Unique Bangladeshi handicrafts created with care, culture and artistic detail.</p>
+    <div class="heroActions"><a class="primary" href="#shop">Shop Collection</a><a class="secondary" href="#story">Our Story</a></div>
+  </div>
+  <div class="heroVisual"><img src="assets/decor.jpeg" alt="Alpona handicraft"></div>
+</section>
+
+<section class="trustbar"><span>Handmade in Bangladesh</span><span>Delivery Across Bangladesh</span><span>Secure Order Details</span></section>
+
+<section id="shop" class="section">
+  <p class="kicker">OUR COLLECTION</p>
+  <div class="sectionHead"><h2>Made with care. Rooted in culture.</h2><select id="categoryFilter" onchange="renderProducts()"><option value="all">All products</option></select></div>
+  <div id="products" class="productGrid"></div>
+</section>
+
+<section id="story" class="story">
+  <img src="assets/logo.jpeg" alt="Alpona">
+  <div><p class="kicker">আমাদের গল্প · OUR STORY</p><h2>A piece of Bangladesh in every creation.</h2><p>Alpona celebrates traditional Bangladeshi art through handcrafted home décor, bags, clothing and gifts. Our goal is to preserve cultural beauty while creating products people can use, wear and share.</p></div>
+</section>
+
+<section class="section">
+  <p class="kicker">HOW IT WORKS</p>
+  <div class="steps"><div><b>01</b><h3>Choose</h3><p>Browse handmade collections and add your favorites to cart.</p></div><div><b>02</b><h3>Order</h3><p>Enter your Bangladesh delivery information and payment preference.</p></div><div><b>03</b><h3>Delivered</h3><p>Alpona confirms, prepares and dispatches your order.</p></div></div>
+</section>
+
+<section class="newsletter section">
+  <div><p class="kicker">STAY UPDATED</p><h2>New arrivals from Alpona</h2><p>Subscribe for new products, restocks and special offers.</p></div>
+  <form id="subscribeForm" onsubmit="subscribeEmail(event)"><input name="email" type="email" placeholder="Your email address" required><button class="primary">Subscribe</button></form>
+</section>
+</main>
+
+<footer id="contact">
+  <div><h3>আলপনা · ALPONA</h3><p>Handmade with Care & Culture</p></div>
+  <div><b>Shop</b><p>Home Décor<br>Bags<br>Clothing<br>Gifts</p></div>
+  <div><b>Customer Care</b><p>Delivery<br>Returns<br>Contact</p></div>
+  <div><b>Bangladesh</b><p>Prices shown in BDT (৳)</p></div>
+</footer>
+
+<!-- Product modal -->
+<div id="productModal" class="modal"><div class="modalCard productModalCard"><button class="x" onclick="closeModal('productModal')">×</button><div id="productDetails"></div></div></div>
+
+<!-- Cart drawer -->
+<div id="overlay" class="overlay" onclick="closeCart()"></div>
+<aside id="cartDrawer" class="drawer">
+  <button class="x" onclick="closeCart()">×</button><h2>Your Cart</h2><div id="cartItems"></div>
+  <div class="cartTotal"><span>Total</span><strong id="cartTotal">৳0</strong></div>
+  <button class="primary full" onclick="openCheckout()">Checkout</button>
+</aside>
+
+<!-- Checkout -->
+<div id="checkoutModal" class="modal"><div class="modalCard"><button class="x" onclick="closeModal('checkoutModal')">×</button>
+<h2>Checkout</h2><p class="muted">Your order details are securely sent to Alpona.</p>
+<form id="checkoutForm" onsubmit="placeOrder(event)">
+<label>Name<input name="name" required></label>
+<label>Mobile Number<input name="phone" required></label>
+<label>Email Address<input name="email" type="email" required></label>
+<label>Delivery Address<textarea name="address" required></textarea></label>
+<label>Delivery Area<select name="area"><option>Inside Dhaka</option><option>Outside Dhaka</option></select></label>
+<label>Payment<select name="payment"><option>Cash on Delivery</option><option>Manual bKash confirmation</option></select></label>
+<label class="checkLabel"><input name="marketingOptIn" type="checkbox"> Email me about new products, restocks and special offers.</label>
+<button class="primary full">Place Order</button>
+</form></div></div>
+
+<!-- Owner login -->
+<div id="loginModal" class="modal"><div class="modalCard small"><button class="x" onclick="closeModal('loginModal')">×</button>
+<h2>Owner Login</h2><p class="muted">Private owner access.</p>
+<form onsubmit="adminLogin(event)"><label>Email<input id="ownerEmail" type="email" required></label><label>Password<input id="ownerPassword" type="password" required></label><button class="primary full">Open Dashboard</button></form>
+</div></div>
+
+<!-- Admin -->
+<section id="adminPanel" class="adminPanel">
+<header class="adminHeader"><div><span class="kicker">PRIVATE OWNER AREA</span><h2>Alpona Dashboard</h2></div><div><button class="secondary" onclick="closeAdmin()">View Store</button><button class="danger" onclick="adminLogout()">Log out</button></div></header>
+
+<div class="stats">
+  <div><span>Sales</span><b id="statSales">৳0</b></div>
+  <div><span>Orders</span><b id="statOrders">0</b></div>
+  <div><span>Expenses</span><b id="statExpenses">৳0</b></div>
+  <div><span>Estimated Profit</span><b id="statProfit">৳0</b></div>
+</div>
+
+<div class="adminTabs">
+<button onclick="setTab('orders')" class="tab active">Orders</button>
+<button onclick="setTab('products')" class="tab">Products</button>
+<button onclick="setTab('expenses')" class="tab">Expenses</button>
+<button onclick="setTab('reports')" class="tab">Reports</button>
+</div>
+
+<div id="tab-orders" class="tabBody"></div>
+
+<div id="tab-products" class="tabBody hidden">
+  <div class="panelHead"><h3>Products</h3><button class="primary" onclick="openProductForm()">+ Add Product</button></div>
+  <div id="adminProducts"></div>
+</div>
+
+<div id="tab-expenses" class="tabBody hidden">
+  <div class="panelHead"><h3>Expenses</h3><button class="primary" onclick="openExpenseForm()">+ Add Expense</button></div>
+  <div id="expenseList"></div>
+</div>
+<div id="tab-reports" class="tabBody hidden"><div id="reportContent"></div></div>
+</section>
+
+<!-- Admin product form -->
+<div id="productFormModal" class="modal"><div class="modalCard"><button class="x" onclick="closeModal('productFormModal')">×</button>
+<h2 id="productFormTitle">Add Product</h2>
+<form id="productForm" onsubmit="saveProduct(event)">
+<input type="hidden" name="id">
+<label>Product Name<input name="name" required></label>
+<label>Category<input name="category" required placeholder="Bags, Clothing, Home Décor..."></label>
+<div class="two"><label>Selling Price (৳)<input name="price" type="number" min="0" required></label><label>Cost (৳)<input name="cost" type="number" min="0" required></label></div>
+<div class="two"><label>Stock Quantity<input name="stock" type="number" min="0" required></label><label>Image<select name="image"><option value="assets/decor.jpeg">Décor photo</option><option value="assets/bag.jpeg">Bag photo</option><option value="assets/clothing.jpeg">Clothing photo</option><option value="assets/logo.jpeg">Logo</option></select></label></div>
+<label>Description<textarea name="description" required></textarea></label>
+<button class="primary full">Save Product</button>
+</form></div></div>
+
+<!-- Expense form -->
+<div id="expenseModal" class="modal"><div class="modalCard small"><button class="x" onclick="closeModal('expenseModal')">×</button>
+<h2>Add Expense</h2><form onsubmit="saveExpense(event)">
+<label>Description<input name="description" required placeholder="Packaging, courier, materials..."></label>
+<label>Amount (৳)<input name="amount" type="number" min="0" required></label>
+<button class="primary full">Save Expense</button></form></div></div>
+
+<button id="aiOpen" class="aiOpen" onclick="toggleAI()" aria-label="Open AI assistant">AI</button>
+<div id="aiPanel" class="aiPanel">
+  <div class="aiHead"><strong>Alpona Assistant</strong><button onclick="toggleAI()">×</button></div>
+  <div id="aiMessages" class="aiMessages"><div class="aiMsg bot">Hello! Ask me about Alpona products, prices, delivery or ordering.</div></div>
+  <form class="aiForm" onsubmit="sendAI(event)"><input id="aiInput" placeholder="Ask Alpona..." maxlength="1000" required><button class="primary">Send</button></form>
+</div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
